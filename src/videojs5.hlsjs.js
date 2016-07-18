@@ -18,6 +18,19 @@
         var duration = null;
         var hls = new Hls(options.hlsjsConfig);
 
+        // setup a reference to HLS
+        if (tech.options_ && tech.options_.playerId) {
+          var _player = videojs(tech.options_.playerId);
+
+          if (!_player.hasOwnProperty('hls')) {
+            Object.defineProperty(_player, 'hls', {
+              get: function get() {
+                return hls;
+              }
+            });
+          }
+        }
+
         /**
          * creates an error handler function
          * @returns {Function}

@@ -18,17 +18,20 @@
         var duration = null;
         var hls = new Hls(options.hlsjsConfig);
 
+        // Workaround: Skip first audio-only chunk list. Will fail on poor connection anyway...
+        hls.startLevel = 1;
+
         // setup a reference to HLS
         if (tech.options_ && tech.options_.playerId) {
-          var _player = videojs(tech.options_.playerId);
+            var _player = videojs(tech.options_.playerId);
 
-          if (!_player.hasOwnProperty('hls')) {
-            Object.defineProperty(_player, 'hls', {
-              get: function get() {
-                return hls;
-              }
-            });
-          }
+            if (!_player.hasOwnProperty('hls')) {
+                Object.defineProperty(_player, 'hls', {
+                    get: function get() {
+                        return hls;
+                    }
+                });
+            }
         }
 
         /**

@@ -110,6 +110,13 @@
             }
         });
 
+        Object.keys(Hls.Events).forEach(function(key) {
+            var eventName = Hls.Events[key];
+            hls.on(eventName, function(event, data) {
+                tech.trigger(eventName, data);
+            });
+        });
+
         // attach hlsjs to videotag
         hls.attachMedia(el);
         hls.loadSource(source.src);
@@ -120,7 +127,9 @@
             var hlsTypeRE = /^application\/x-mpegURL$/i;
             var hlsExtRE = /\.m3u8/i;
 
-            if (hlsTypeRE.test(source.type)) {
+            if (source.skipContribHlsJs) {
+                return '';
+            } else if (hlsTypeRE.test(source.type)) {
                 return 'probably';
             } else if (hlsExtRE.test(source.src)) {
                 return 'maybe';
